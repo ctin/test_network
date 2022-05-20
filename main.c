@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <stdint.h>
+#include <signal.h>
 
 void* ServerThread(void* arg) {
 
@@ -19,7 +21,7 @@ void* ServerThread(void* arg) {
     ServerAddListener(s, SERVER_EVENT_ACCEPT, OnAccept);
 
     int port = *(int*)arg;
-    printf("starting server\n");
+    printf("starting server on port %d\n", port);
     ServerListen(s, port);
     printf("server started\n");
     while (ServerGetStreamsCount() > 0) {

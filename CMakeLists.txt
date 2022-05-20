@@ -34,6 +34,13 @@ set (HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/realloc.h
 )
 
+if(UNIX AND NOT APPLE)
+    find_package(Threads REQUIRED)
+endif()
+
 add_executable (${ProjectId} ${SOURCES} ${HEADERS} )
 
 target_include_directories(${ProjectId} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
+if(UNIX AND NOT APPLE)
+    target_link_libraries(${ProjectId} PRIVATE Threads::Threads)
+endif()
