@@ -4,12 +4,15 @@
 #include <pthread.h>
 #include <stdatomic.h>
 
-pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-const int QUEUE_SIZE = 256;
+#ifdef QUEUE_SIZE
+#error "QUEUE_SIZE already defined"
+#endif //QUEUE_SIZE
+#define QUEUE_SIZE 256
 
-EventLoopFunction *queue[QUEUE_SIZE] = {0};
-atomic_int g_current_position = 0;
+static EventLoopTaskData queue[QUEUE_SIZE] = {0};
+static atomic_int g_current_position = 0;
 
 static void LockMutex() {
     int lock_result = pthread_mutex_lock(&g_mutex);
@@ -25,13 +28,21 @@ static void UnlockMutex() {
     }
 }
 
-bool AddTask(EventLoopFunction func) {
+EventLoopTaskData CreateTask(void* data, EventLoopTaskPtr task, EventLoopTaskFinishedCBPtr onTaskFinished) {
+    EventLoopTaskData eventLoopTaskData;
+    eventLoopTaskData.data = data;
+    eventLoopTaskData.task = task;
+    eventLoopTaskData.onTaskFinished = onTaskFinished;
+    return eventLoopTaskData;
+}
+
+bool AddTask(EventLoopTaskData taskData) {
     if(g_current_position > QUEUE_SIZE) {
         return false;
     }
     LockMutex();
 
-    queue[g_current_position] = func;
+    queue[g_current_position] = taskData;
     ++g_current_position;
 
     UnlockMutex();
@@ -42,15 +53,16 @@ bool HasTasks() {
     return g_current_position != 0;
 }
 
-EventLoopFunction* PopTask() {
+EventLoopTaskData PopTask(bool* success) {
     if(g_current_position == 0) {
-        return NULL;
+        *success = false;
     }
+    *success = true;
     LockMutex();
 
-    EventLoopFunction* func = queue[g_current_position - 1];
+    EventLoopTaskData task = queue[g_current_position - 1];
 
     --g_current_position;
     UnlockMutex();
-    return func;
+    return task;
 }

@@ -1,4 +1,6 @@
+#pragma once
+
 #include "event_loop/functions_queue.h"
 
-bool RunLoop();
+void RunLoop();
 void StopLoop();

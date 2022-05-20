@@ -15,15 +15,23 @@ project(${ProjectId})
 
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/async_server/async_server.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/async_server/vec.c
     ${CMAKE_CURRENT_SOURCE_DIR}/event_loop/event_loop.c
     ${CMAKE_CURRENT_SOURCE_DIR}/event_loop/functions_queue.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/server_handler/server_handler.c
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/error_handler.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/realloc.c
 )
 
 set (HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/async_server/async_server.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/async_server/vec.h
     ${CMAKE_CURRENT_SOURCE_DIR}/event_loop/event_loop.h
     ${CMAKE_CURRENT_SOURCE_DIR}/event_loop/functions_queue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/server_handler/server_handler.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/error_handler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/realloc.h
 )
 
 add_executable (${ProjectId} ${SOURCES} ${HEADERS} )

@@ -1,22 +1,25 @@
 #include "event_loop/event_loop.h"
+#include "event_loop/functions_queue.h"
 #include "utils/error_handler.h"
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
 
-pthread_t g_worker;
-bool g_should_run;
+static pthread_t g_worker;
+static bool g_should_run;
 
 void* Loop(void* args) {
-
+    printf("starting loop\n");
     while(g_should_run) {
         while(HasTasks()) {
-            EventLoopFunction* func = PopTask();
-            if(func == NULL) {
+            bool success;
+            EventLoopTaskData taskData = PopTask(&success);
+            if(success == false) {
                 FatalError("Internal error: has functions, but no function presented");
             } else {
-                printf("invoking\n");
-                func();
+                printf("invoking task\n");
+                taskData.task(taskData.data);
+                taskData.onTaskFinished(taskData.data);
             }
         }
         usleep(10 * 1000);
@@ -32,12 +35,12 @@ void StopLoop() {
     }
 }
 
-bool RunLoop() {
+void RunLoop() {
     g_should_run = true;
 
     int create_result = pthread_create(&g_worker, NULL, Loop, NULL);
     if(create_result != 0) {
-        FatalError("failed to run threadЖ %d", create_result);
+        FatalError("failed to run event loop thread: %d", create_result);
     }
-    return true;
+    printf("Loop started");
 }

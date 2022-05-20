@@ -1,7 +1,20 @@
+#pragma once
+
 #include <stdbool.h>
 
-typedef void EventLoopFunction();
+typedef void (*EventLoopTaskPtr)(void*);
+typedef void (*EventLoopTaskFinishedCBPtr)(void*);
 
-bool AddTask(EventLoopFunction func);
+typedef struct {
+    // this structure should own the data
+    // but only creator should manage that
+    void* data;
+    EventLoopTaskPtr task;
+    EventLoopTaskFinishedCBPtr onTaskFinished;
+} EventLoopTaskData;
+
+EventLoopTaskData CreateTask(void* data, EventLoopTaskPtr task, EventLoopTaskFinishedCBPtr onTaskFinished);
+
+bool AddTask(EventLoopTaskData taskData);
 bool HasTasks();
-EventLoopFunction* PopTask();
+EventLoopTaskData PopTask(bool* success);
