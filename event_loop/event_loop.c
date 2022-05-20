@@ -17,12 +17,11 @@ void* Loop(void* args) {
             if(success == false) {
                 FatalError("Internal error: has functions, but no function presented");
             } else {
-                printf("invoking task\n");
                 taskData.task(taskData.data);
                 taskData.onTaskFinished(taskData.data);
             }
         }
-        usleep(10 * 1000);
+        usleep(2 * 1000 * 1000);
     }
     return NULL;
 }
@@ -42,5 +41,5 @@ void RunLoop() {
     if(create_result != 0) {
         FatalError("failed to run event loop thread: %d", create_result);
     }
-    printf("Loop started");
+    printf("Loop started\n");
 }

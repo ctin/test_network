@@ -15,6 +15,7 @@ typedef struct {
 
 void SendDataTask(void* data) {
     TestProjectTask* task = (TestProjectTask*)data;
+    printf("sending back %s", task->data);
     ServerWrite(task->stream, task->data, task->size);
 }
 
@@ -36,7 +37,7 @@ void OnData(ServerEvent *e) {
 void OnAccept(ServerEvent *e) {
     printf("OnAccept\n");
     ServerAddListener(e->remote, SERVER_EVENT_DATA, OnData);
-    ServerWritef(e->remote, "echo server\r\n");
+    ServerWritef(e->remote, "echo server\n");
 }
 
 void OnError(ServerEvent *e) {

@@ -5,17 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "native_util",
+            "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/test_osx",
             "args": ["8000"],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
+            "MIMode": "lldb",
             "preLaunchTask": "build",
-            "MIMode":"gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -24,6 +24,5 @@
                 }
             ]
         }
-
     ]
 }

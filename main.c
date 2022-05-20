@@ -12,9 +12,7 @@
 void* ServerThread(void* arg) {
 
     ServerStream *s;
-    printf("%d\n", __LINE__);
     ServerInit();
-    printf("%d\n", __LINE__);
 
     s = ServerNewStream();
     ServerAddListener(s, SERVER_EVENT_ERROR,  OnError);

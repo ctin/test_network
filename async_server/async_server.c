@@ -432,7 +432,7 @@ static void ServerAcceptPendingConnections(ServerStream *stream) {
     e = ServerCreateEvent(SERVER_EVENT_ACCEPT);
     e.msg = "accepted connection";
     e.remote = remote;
-    ServerEmitEvent(remote, &e);
+    ServerEmitEvent(stream, &e);
     /* Handle invalid socket -- the stream is still made and the ACCEPT event
      * is still emitted, but its shut immediately with an error */
     if (remote->sockfd == INVALID_SOCKET) {
@@ -738,7 +738,6 @@ void ServerWritef(ServerStream *stream, const char* message, ...) {
     va_list argptr;
     va_start(argptr, message);
     vsnprintf (output, TEMP_BUFFER_SIZE - 1, message, argptr);
-    printf("%s\n", output);
     va_end(argptr);
     int size = TEMP_BUFFER_SIZE;
     char *p = &output[0];
