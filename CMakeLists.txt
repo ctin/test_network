@@ -16,10 +16,12 @@ project(${ProjectId})
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/error_handler.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/wierd_strrev.c
 )
 
 set (HEADERS
 ${CMAKE_CURRENT_SOURCE_DIR}/utils/error_handler.h
+${CMAKE_CURRENT_SOURCE_DIR}/utils/wierd_strrev.h
 )
 
 add_subdirectory(submodules/libev-cmake)

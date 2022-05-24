@@ -14,6 +14,7 @@
 #include <ev.h>
 
 #include "utils/error_handler.h"
+#include "utils/wierd_strrev.h"
 
 #define assertm(exp, msg) assert(((void)msg, exp))
 
@@ -60,8 +61,8 @@ static void ReadCB(EV_P_ ev_io *watcher, int revents)
 
     ret = recv(watcher->fd, buf, sizeof(buf) - 1, MSG_DONTWAIT);
     if (ret > 0)
-	{
-        write(watcher->fd, buf, ret);
+	{;
+        write(watcher->fd, strrev((char*)buf), ret);
 
     }
 	else if ((ret < 0) && (errno == EAGAIN || errno == EWOULDBLOCK))
