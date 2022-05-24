@@ -1,3 +1,0 @@
-[submodule "submodules/libev-cmake"]
-	path = submodules/libev-cmake
-	url = git@github.com:ctin/libev-cmake.git
